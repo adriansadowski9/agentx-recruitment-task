@@ -9,3 +9,4 @@ export const CHART_MIN_WIND_SPEED_VALUE = 0;
 export const CHART_MAX_WIND_SPEED_VALUE = 20;
 export const CHART_MIN_HUMIDITY_VALUE = 0;
 export const CHART_MAX_HUMIDITY_VALUE = 100;
+export const HISTORICAL_SEARCHES_LOCAL_STORAGE_KEY = 'historicalSearches';
