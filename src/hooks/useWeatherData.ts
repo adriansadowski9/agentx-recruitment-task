@@ -49,20 +49,19 @@ export type WeatherData = {
     }
 }
 
-export const useWeatherData = (coord?: Coord) => {
-    return useQuery({
+export const useWeatherData = (coord?: Coord) => 
+    useQuery({
         queryKey: ['weatherQuery', coord],
         queryFn: async () => {
             if (!coord)
                 return;
 
-            const { data } = await api.get(
+            const { data } = await api.get<WeatherData>(
                 `/v1/current.json?q=${coord.lat},${coord.lon}`
             );
 
-            return data as WeatherData
+            return data
         },
         staleTime: MINUTE_IN_MILLISECONDS * 5,
         enabled: !!coord,
     })
-}

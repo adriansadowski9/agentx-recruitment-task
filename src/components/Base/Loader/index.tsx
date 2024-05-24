@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-const Loader: React.FC = () => {
+const Loader = () => {
     return (
         <div role="status">
             <svg aria-hidden="true" className="w-full h-full text-violet-100 animate-spin fill-violet-400" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

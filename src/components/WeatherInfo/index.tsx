@@ -8,7 +8,7 @@ interface WeatherInfoProps {
     chartData: RadarChartData
 }
 
-const WeatherInfo: React.FC<WeatherInfoProps> = ({ name, temperature, humidity, windSpeed, chartData }) => {
+const WeatherInfo = ({ name, temperature, humidity, windSpeed, chartData }: WeatherInfoProps) => {
     return (
         <div className="w-full max-w-7xl flex items-top justify-center self-center">
             <div className="w-full flex-col">
@@ -17,10 +17,10 @@ const WeatherInfo: React.FC<WeatherInfoProps> = ({ name, temperature, humidity, 
                         {name}
                     </h2>
                     <div className="flex-col items-center mt-1">
-                        <p className="text-xl font-light">
+                        <p className="text-xl font-light md:text-center">
                             Humidity: {humidity}%
                         </p>
-                        <p className="text-xl font-light">
+                        <p className="text-xl font-light md:text-center">
                             Wind speed: {windSpeed} kph
                         </p>
                     </div>

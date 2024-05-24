@@ -1,7 +1,6 @@
-import * as React from 'react';
 import Logo from '../Base/Logo';
 
-const Header: React.FC = () => {
+const Header = () => {
     return (
         <nav className="flex items-center justify-center flex-wrap bg-violet-400 p-6">
             <div className="flex items-center text-white h-8">

@@ -1,13 +1,14 @@
 import {
     Chart as ChartJS,
     ChartOptions,
+    Plugin
 } from 'chart.js';
 import { CHART_MAX_VALUE, CHART_MIN_VALUE, CHART_STEP_SIZE, CHART_TICKS_LIMIT } from '../../utils/constants';
 
-export const radarChartPlugins = [
+export const radarChartPlugins: Plugin<'radar'>[] = [
     {
         id: 'shadow',
-        beforeDraw: (chart: ChartJS<'radar', number[], unknown>) => {
+        beforeDraw: (chart: ChartJS<'radar'>) => {
         const { ctx } = chart;
         const _fill = ctx.fill;
         ctx.fill = function (...args) {
@@ -16,7 +17,7 @@ export const radarChartPlugins = [
             ctx.shadowBlur = 100;
             ctx.shadowOffsetX = 4;
             ctx.shadowOffsetY = 4;
-                _fill.apply(this, args as [path: Path2D, fillRule?: CanvasFillRule]);
+            _fill.apply(this, args as [path: Path2D, fillRule?: CanvasFillRule]);
             ctx.restore();
         };  
         },

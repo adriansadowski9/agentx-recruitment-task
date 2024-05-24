@@ -15,20 +15,19 @@ export type Geo = {
 
 export type GeoData = Geo[]
 
-export const useGeoData = (q: string) => {
-    return useQuery({
+export const useGeoData = (q: string) => 
+    useQuery({
         queryKey: ['geoQuery', q],
         queryFn: async () => {
             if (!q)
-                return;
+                return [];
 
-            const { data } = await api.get(
+            const { data } = await api.get<GeoData>(
                 `/v1/search.json?q=${q}`,
             );
 
-            return data as GeoData
+            return data
         },
         staleTime: MINUTE_IN_MILLISECONDS * 5,
         enabled: !!q,
     })
-}

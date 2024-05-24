@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
     Chart as ChartJS,
     RadialLinearScale,
@@ -27,7 +26,7 @@ interface RadarChartProps {
     data: RadarChartData
 }
 
-const RadarChart: React.FC<RadarChartProps> = ({ data }) => {
+const RadarChart = ({ data }: RadarChartProps) => {
     return (
         <Radar 
             options={radarChartOptions} 
