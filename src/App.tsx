@@ -38,7 +38,7 @@ const App = () => {
         HISTORICAL_SEARCHES_LOCAL_STORAGE_KEY, 
         JSON.stringify(slicedValue)
       );
-      
+
       return slicedValue;
     })
   }, [weatherData])

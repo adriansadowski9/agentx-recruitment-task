@@ -1,11 +1,9 @@
-import * as React from 'react';
-
 interface SearchInputProps {
     searchValue: string
     setSearchValue: (value: string) => void
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({ searchValue, setSearchValue }) => {
+const SearchInput = ({ searchValue, setSearchValue }: SearchInputProps) => {
     return (
         <input 
             type="text" 

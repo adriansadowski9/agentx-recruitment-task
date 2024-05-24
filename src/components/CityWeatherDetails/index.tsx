@@ -22,11 +22,11 @@ interface CityWeatherDetailsProps {
     weatherData?: WeatherData
 }
 
-const CityWeatherDetails: React.FC<CityWeatherDetailsProps> = ({
+const CityWeatherDetails = ({
     isWeatherDataLoading,
     weatherError,
     weatherData
-}) => {
+}: CityWeatherDetailsProps) => {
     const chartData: RadarChartData = {
         labels: ['Temperature', 'Wind speed', 'Humidity'],
         datasets: weatherData ? [{
@@ -55,7 +55,7 @@ const CityWeatherDetails: React.FC<CityWeatherDetailsProps> = ({
         if (!weatherData || !chartData.datasets.length)
             return (
                 <h2 className="text-3xl font-bold">
-                Use the search bar to find weather information for any city.
+                    Use the search bar to find weather information for any city.
                 </h2>
             );
     

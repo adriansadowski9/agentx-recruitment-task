@@ -44,11 +44,12 @@ const SearchBar = ({
                     Select a city from the list below
                 </p>
                 {geoData.map(({ id, name, lat, lon, region, country }) => {
+                    const onGeoDataButtonClick = () => onCityPick({ lat, lon });
                     return (
                         <button 
                             key={`${name}-${id}`} 
                             type="button"
-                            onClick={() => onCityPick({ lat, lon })}
+                            onClick={onGeoDataButtonClick}
                             className="w-full cursor-pointer text-left py-3 px-8 bg-gray-100 hover:bg-violet-200"
                         >
                             <p className="text-l font-medium text-black">{name}</p>
@@ -69,14 +70,16 @@ const SearchBar = ({
                     />
                     {!!historicalSearches && !!historicalSearches.length && (
                         <div className="w-full flex flex-wrap items-center pt-2">
-                            {historicalSearches.map(({ name, coord }, index) => (
-                                <HistoryButton
-                                    key={`${index}-${name}-${coord.lon}-${coord.lat}`} 
-                                    onClick={() => onCityPick(coord)}
-                                >
-                                    {name}
-                                </HistoryButton>
-                            ))}
+                            {historicalSearches.map(({ name, coord }, index) => {
+                                const onHistoryButtonClick = () => onCityPick(coord);
+                                return (
+                                    <HistoryButton
+                                        key={`${index}-${name}-${coord.lon}-${coord.lat}`} 
+                                        onClick={onHistoryButtonClick}
+                                    >
+                                        {name}
+                                    </HistoryButton>
+                            )})}
                         </div>
                     )}
                     {isGeoDataLoading && (

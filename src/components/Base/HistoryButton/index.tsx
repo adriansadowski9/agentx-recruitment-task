@@ -5,7 +5,7 @@ interface HistoryButtonProps {
     children: React.ReactNode
 }
 
-const HistoryButton: React.FC<HistoryButtonProps> = ({ onClick, children }) => {
+const HistoryButton = ({ onClick, children }: HistoryButtonProps) => {
     return (
         <button 
             type="button" 
