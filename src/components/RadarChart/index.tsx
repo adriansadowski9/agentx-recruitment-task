@@ -20,7 +20,9 @@ ChartJS.register(
     Legend
 );
 
-export type RadarChartData = ChartData<"radar", (number | null)[], unknown>
+export type RadarChartDataValues = { name: string, values: { chart: number, tooltip: string }}
+
+export type RadarChartData = ChartData<"radar", RadarChartDataValues[], unknown>
 
 interface RadarChartProps {
     data: RadarChartData

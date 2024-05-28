@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { scale } from '../../utils/scale';
 import Loader from '../Base/Loader';
 import WeatherInfo from '../WeatherInfo';
@@ -29,25 +28,27 @@ const CityWeatherDetails = ({
 }: CityWeatherDetailsProps) => {
     const chartData: RadarChartData = {
         labels: ['Temperature', 'Wind speed', 'Humidity'],
-        datasets: weatherData ? [{
-          data: [
-            scale(
-                weatherData.current.temp_c, 
-                [CHART_MIN_TEMP_VALUE, CHART_MAX_TEMP_VALUE], 
-                [CHART_MIN_VALUE, CHART_MAX_VALUE]
-            ),
-            scale(
-                weatherData.current.wind_kph, 
-                [CHART_MIN_WIND_SPEED_VALUE, CHART_MAX_WIND_SPEED_VALUE], 
-                [CHART_MIN_VALUE, CHART_MAX_VALUE]
-            ),
-            scale(
-                weatherData.current.humidity, 
-                [CHART_MIN_HUMIDITY_VALUE, CHART_MAX_HUMIDITY_VALUE], 
-                [CHART_MIN_VALUE, CHART_MAX_VALUE]
-            )
-          ]
-        }] : [],
+        datasets: weatherData ? [
+            {
+                data: [
+                    { name: `${weatherData.location.name} temperature`, values: { chart: scale(
+                        weatherData.current.temp_c, 
+                        [CHART_MIN_TEMP_VALUE, CHART_MAX_TEMP_VALUE], 
+                        [CHART_MIN_VALUE, CHART_MAX_VALUE]
+                    ), tooltip: `${weatherData.current.temp_c}°C` }}, 
+                    { name: `${weatherData.location.name} wind speed`, values: { chart: scale(
+                        weatherData.current.wind_kph, 
+                        [CHART_MIN_WIND_SPEED_VALUE, CHART_MAX_WIND_SPEED_VALUE], 
+                        [CHART_MIN_VALUE, CHART_MAX_VALUE]
+                    ), tooltip: `${weatherData.current.wind_kph} kph` }},
+                    { name: `${weatherData.location.name} humidity`, values: { chart: scale(
+                        weatherData.current.humidity, 
+                        [CHART_MIN_HUMIDITY_VALUE, CHART_MAX_HUMIDITY_VALUE], 
+                        [CHART_MIN_VALUE, CHART_MAX_VALUE]
+                    ), tooltip: `${weatherData.current.humidity}%` }},
+                ],
+            },
+    ] : [],
     };
 
     const renderWeatherInfo = () => {
