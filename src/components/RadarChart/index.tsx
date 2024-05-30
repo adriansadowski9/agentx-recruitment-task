@@ -34,6 +34,11 @@ const RadarChart = ({ data }: RadarChartProps) => {
             options={radarChartOptions} 
             plugins={radarChartPlugins}
             data={data}
+            width="100%"
+            height="100%"
+            style={{
+                position: 'absolute',
+            }}
         />
     )
 }

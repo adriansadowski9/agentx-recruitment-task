@@ -48,7 +48,7 @@ const CityWeatherDetails = ({
                     ), tooltip: `${weatherData.current.humidity}%` }},
                 ],
             },
-    ] : [],
+        ] : [],
     };
 
     const renderWeatherInfo = () => {
@@ -72,7 +72,7 @@ const CityWeatherDetails = ({
     };
       
     return (
-        <div className="w-full flex justify-center pt-16 pb-8 px-8">
+        <div className="w-full max-w-[1440px] flex justify-center pt-8 pb-8 px-8">
             {!!weatherError && (
                 <p className="text-xl font-bold">
                     Error. Weather data not found. ({weatherError.message})

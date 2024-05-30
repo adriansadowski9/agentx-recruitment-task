@@ -1,4 +1,5 @@
 import {
+    ChartDataset,
     Chart as ChartJS,
     ChartOptions,
     CoreScaleOptions,
@@ -16,10 +17,12 @@ interface RadialScale extends Scale<CoreScaleOptions> {
     drawingArea: number;
 }
 
-export const radarChartPlugins: Plugin<'radar'>[] = [
+type RadarPluginDataType = (RadarChartDataValues | (number | null))[]
+
+export const radarChartPlugins: Plugin<'radar', RadarPluginDataType>[] = [
     {
         id: 'addShadowToDatasets',
-        beforeDatasetDraw: (chart: ChartJS<'radar'>, { index }) => {
+        beforeDatasetDraw: (chart: ChartJS<'radar', RadarPluginDataType>, { index }) => {
             const { ctx } = chart;
 
             const shadowCanvas = document.createElement('canvas');
@@ -59,7 +62,7 @@ export const radarChartPlugins: Plugin<'radar'>[] = [
     },
     {
         id: 'renderRotatedPointLabels',
-        beforeDraw: (chart: ChartJS<'radar'>) => {
+        beforeDraw: (chart: ChartJS<'radar', RadarPluginDataType>) => {
             const { ctx, scales: { r } } = chart;
             const radialScale = r as RadialScale;
             const pointLabels = radialScale._pointLabels;
@@ -75,8 +78,8 @@ export const radarChartPlugins: Plugin<'radar'>[] = [
 
             pointLabels.forEach((label, i) => {
                 const angle = radialScale.getIndexAngle(i) - Math.PI / 2;
-                const x = chart.width / 2 + Math.cos(angle) * (maxRadius + 16);
-                const y = chart.height / 2 + Math.sin(angle) * (maxRadius + 16);
+                const x = chart.width / 2 + Math.cos(angle) * (maxRadius + 32);
+                const y = chart.height / 2 + Math.sin(angle) * (maxRadius + 32);
 
                 ctx.save();
                 ctx.translate(x, y);
@@ -101,7 +104,7 @@ export const radarChartPlugins: Plugin<'radar'>[] = [
     },
     {
         id: 'movePointsWithTooltipsToLabels',
-        afterDatasetsDraw: (chart) => {
+        afterDatasetsDraw: (chart: ChartJS<'radar', RadarPluginDataType>) => {
             const { ctx, data, scales: { r } } = chart;
             const { datasets } = data;
             const radialScale = r as RadialScale;
@@ -145,21 +148,88 @@ export const radarChartPlugins: Plugin<'radar'>[] = [
                 }
             });
         },
+    },
+    {
+        id: 'backgroundColorPlugin',
+        beforeDraw: (chart: ChartJS<'radar', RadarPluginDataType>) => {
+            const { ctx, data, chartArea, scales: { r } } = chart;
+            const radialScale = r as RadialScale;
+            console.log('data', data);
+            const datasets = chart.data.datasets as ChartDataset<"radar", RadarChartDataValues[]>[];
+            const numLabels = data.labels?.length || 0;
+            const allChartValues: number[] = [];
+            const availableColors = [
+                '#FFFFFF',
+                '#F9F9F9',
+                '#FDF2E9',
+                '#FAE0CB'
+            ]
+
+            datasets.forEach((dataset) => {
+                dataset.data.forEach((dataElement) => {
+                    if (dataElement?.values?.chart) {
+                        allChartValues.push(dataElement.values.chart);
+                    }
+                });
+            })
+
+            const { top, left, right, bottom } = chartArea;
+            const centerX = (left + right) / 2;
+            const centerY = (top + bottom) / 2;
+            const radius = radialScale.drawingArea;
+
+            const levels = CHART_MAX_VALUE - CHART_MIN_VALUE;
+            const radiusStep = radius / levels;
+
+            const colors = [...Array(levels).keys()]
+            .map(index => {
+                const min = index + 1;
+                const matchedElements = allChartValues.filter((val) => val >= min).length;
+                return availableColors[matchedElements] ? availableColors[matchedElements] : availableColors[availableColors.length - 1];
+            }).reverse();
+
+            ctx.save();
+
+            const getPointCoordinates = (level: number, angle: number) => {
+                const radian = (Math.PI / 180) * angle;
+                return {
+                    x: centerX + radiusStep * level * Math.cos(radian),
+                    y: centerY + radiusStep * level * Math.sin(radian)
+                };
+            }
+
+            for (let level = levels; level > 0; level--) {
+                ctx.beginPath();
+                for (let i = 0; i < numLabels; i++) {
+                    const angle = (360 / numLabels) * i - 90;
+                    const { x, y } = getPointCoordinates(level, angle);
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.closePath();
+                ctx.fillStyle = colors[levels - level];
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
     }
 ];
 
 interface CustomRadarTooltipItem extends TooltipItem<'radar'> {
     raw: RadarChartDataValues
-  }
+}
 
 export const radarChartOptions: ChartOptions<'radar'> = {
     parsing: {
         key: 'values.chart'
     },
     responsive: true,
-    maintainAspectRatio: false,
     layout: {
-        padding: 32
+        padding: 48
     },
     plugins: {
         legend: {
